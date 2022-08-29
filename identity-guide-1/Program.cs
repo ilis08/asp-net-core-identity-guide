@@ -1,3 +1,5 @@
+using identity_guide_1.AuthorizationRequirements;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -9,7 +11,20 @@ builder.Services.AddRazorPages()
 builder.Services.AddAuthentication("MyCookieAuth").AddCookie("MyCookieAuth", opts =>
 {
     opts.Cookie.Name = "MyCookieAuth";
+    opts.AccessDeniedPath = "/Account/AccessDenied";
 });
+
+builder.Services.AddAuthorization(opts =>
+{
+    opts.AddPolicy("MustBelongToHRDepartment",
+        policy => policy.RequireClaim("Department", "HR"));
+
+    opts.AddPolicy("HRManagerOnly", policy => policy
+            .RequireClaim("Manager")
+            .Requirements.Add(new HRManagerProbationRequirement(3)));
+});
+
+builder.Services.AddSingleton<IAuthorizationHandler, HRManagerProbationRequirementHandler>();
 
 var app = builder.Build();
 

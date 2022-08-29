@@ -21,12 +21,15 @@ namespace identity_guide_1.Pages.Account
                 var claims = new List<Claim>
                 {
                     new Claim(ClaimTypes.Name, "admin"),
-                    new Claim(ClaimTypes.Email, "admin@mywebsite.com")
+                    new Claim(ClaimTypes.Email, "admin@mywebsite.com"),
+                    new Claim("Department", "HR"),
+                    new Claim("Manager", "true"),
+                    new Claim("EmploymentDate", "2022-06-26")
                 };
 
                 var identity = new ClaimsIdentity(claims, "MyCookieAuth");
 
-                ClaimsPrincipal claimsPrincipal = new ClaimsPrincipal(identity);
+                ClaimsPrincipal claimsPrincipal = new(identity);
 
                 await HttpContext.SignInAsync("MyCookieAuth", claimsPrincipal);
 

@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace identity_guide_1.Pages
 {
+    [Authorize]
     public class PrivacyModel : PageModel
     {
         private readonly ILogger<PrivacyModel> _logger;
@@ -13,14 +14,8 @@ namespace identity_guide_1.Pages
             _logger = logger;
         }
 
-        public IActionResult OnGet()
+        public void OnGet()
         {
-            if (User.Identity.IsAuthenticated is false)
-            {
-                return RedirectToPage("Account/Login");
-            }
-
-            return Page();
         }
     }
 }
