@@ -1,5 +1,6 @@
 using identity_guide_1.Models;
 using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using System.Security.Claims;
@@ -31,7 +32,9 @@ namespace identity_guide_1.Pages.Account
 
                 ClaimsPrincipal claimsPrincipal = new(identity);
 
-                await HttpContext.SignInAsync("MyCookieAuth", claimsPrincipal);
+                var authProperties = new AuthenticationProperties { IsPersistent = Credential.RememberMe };
+
+                await HttpContext.SignInAsync("MyCookieAuth", claimsPrincipal, authProperties);
 
                 return RedirectToPage("/Index");
             }
