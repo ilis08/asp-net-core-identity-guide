@@ -6,3 +6,27 @@
 <div class="text-center">
     <h1 class="display-4">Human Resource Manager Page</h1>
 </div>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th scope="col">Date</th>
+            <th scope="col">Temperature C</th>
+            <th scope="col">Temperature F</th>
+            <th scope="col">Summary</th>
+        </tr>
+    </thead>
+    <tbody>
+
+        @foreach (var item in Model.Forecasts)
+        {
+            <tr>
+                <th>@item.Date</th>
+                <td>@item.TemperatureC</td>
+                <td>@item.TemperatureF</td>
+                <td>@item.Summary</td>
+            </tr>
+        }
+
+    </tbody>
+</table>
