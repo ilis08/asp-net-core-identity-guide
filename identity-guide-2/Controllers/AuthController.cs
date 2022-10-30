@@ -29,6 +29,7 @@ namespace identity_guide_2.Controllers
                 {
                     new Claim(ClaimTypes.Name, "admin"),
                     new Claim(ClaimTypes.Email, "admin@mywebsite.com"),
+                    new Claim("Admin", "true"),
                     new Claim("Department", "HR"),
                     new Claim("Manager", "true"),
                     new Claim("EmploymentDate", "2022-06-26")

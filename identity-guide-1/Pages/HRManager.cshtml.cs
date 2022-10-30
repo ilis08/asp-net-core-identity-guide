@@ -25,15 +25,45 @@ namespace identity_guide_1.Pages
 
         public async Task OnGet()
         {
+            //get token from session 
+
+            Token token = null;
+
+            var strTokenObj = HttpContext.Session.GetString("access_token");
+
+            if (string.IsNullOrWhiteSpace(strTokenObj))
+            {
+                token = await Authenticate();
+            }
+            else
+            {
+                token = JsonConvert.DeserializeObject<Token>(strTokenObj);
+            }
+
+            if (token == null || string.IsNullOrWhiteSpace(token.AccessToken) || token.ExpiresAt <= DateTime.UtcNow)
+            {
+                token = await Authenticate();
+            }
+
             var httpClient = client.CreateClient("OurWebAPI");
-
-            var result = await httpClient.PostAsJsonAsync("auth", new Credential { UserName = "admin",Password = "admin", RememberMe = true });
-
-            var token = JsonConvert.DeserializeObject<Token>(await result.Content.ReadAsStringAsync());
 
             httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token.AccessToken);
 
             Forecasts = await httpClient.GetFromJsonAsync<List<WeatherForecastDTO>>("WeatherForecast");
+        }
+
+        private async Task<Token> Authenticate()
+        {
+            //authentication & getting the token
+            var httpClient = client.CreateClient("OurWebAPI");
+
+            var result = await httpClient.PostAsJsonAsync("auth", new Credential { UserName = "admin", Password = "admin", RememberMe = true });
+
+            var strJwt = await result.Content.ReadAsStringAsync();
+
+            HttpContext.Session.SetString("access_token", strJwt);
+
+            return JsonConvert.DeserializeObject<Token>(strJwt);
         }
     }
 }

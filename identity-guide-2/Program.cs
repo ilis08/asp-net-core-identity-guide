@@ -24,6 +24,11 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJw
     };
 });
 
+builder.Services.AddAuthorization(opts =>
+{
+    opts.AddPolicy("AdminOnly", policy => policy.RequireClaim("Admin", "true"));
+});
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

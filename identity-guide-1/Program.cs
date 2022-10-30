@@ -31,6 +31,13 @@ builder.Services.AddHttpClient("OurWebAPI", client =>
     client.BaseAddress = new Uri("https://localhost:7127/");
 });
 
+builder.Services.AddSession(opts =>
+{
+    opts.Cookie.HttpOnly = true;
+    opts.IdleTimeout = TimeSpan.FromHours(8);
+    opts.Cookie.IsEssential = true;
+});
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -49,6 +56,8 @@ app.UseRouting();
 app.UseAuthentication();
 
 app.UseAuthorization();
+
+app.UseSession();
 
 app.MapRazorPages();
 

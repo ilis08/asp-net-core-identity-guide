@@ -5,7 +5,7 @@ namespace identity_guide_2.Controllers
 {
     [ApiController]
     [Route("[controller]")]
-    [Authorize]
+    [Authorize(Policy = "AdminOnly")]
     public class WeatherForecastController : ControllerBase
     {
         private static readonly string[] Summaries = new[]
